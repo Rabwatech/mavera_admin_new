@@ -1,5 +1,6 @@
+"use client";
 
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { UserProfile, UserRole, Permission } from '../types/auth';
 
 // 1. Define Role -> Permissions Mapping
@@ -23,15 +24,45 @@ const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
 };
 
 interface AuthContextType {
-  user: UserProfile;
+  user: UserProfile | null;
+  login: (user: UserProfile) => void;
+  logout: () => void;
   hasPermission: (permission: Permission) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ user: UserProfile; children: ReactNode }> = ({ user, children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load user from localStorage on mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem('mavera_user');
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error('Failed to parse stored user:', error);
+        localStorage.removeItem('mavera_user');
+      }
+    }
+    setIsLoading(false);
+  }, []);
+
+  const login = (userData: UserProfile) => {
+    setUser(userData);
+    localStorage.setItem('mavera_user', JSON.stringify(userData));
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('mavera_user');
+  };
   
   const hasPermission = (permission: Permission): boolean => {
+    if (!user) return false;
+    
     // 1. Gather all roles the user has
     const userRoles = user.roles || [user.role];
     
@@ -44,8 +75,16 @@ export const AuthProvider: React.FC<{ user: UserProfile; children: ReactNode }> 
     return allPermissions.has(permission);
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="w-16 h-16 border-4 border-mavera-gold border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   return (
-    <AuthContext.Provider value={{ user, hasPermission }}>
+    <AuthContext.Provider value={{ user, login, logout, hasPermission }}>
       {children}
     </AuthContext.Provider>
   );
@@ -63,3 +102,5 @@ export const usePermission = (permission: Permission) => {
   const { hasPermission } = useAuth();
   return hasPermission(permission);
 };
+
+export { UserRole };

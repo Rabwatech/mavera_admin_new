@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { LayoutDashboard, Users, Calendar, FileText, Settings, Award, PhoneIncoming, LogOut, X, Activity, FileCheck, BarChart3, Map, Trello, Receipt, ScrollText, Link as LinkIcon } from 'lucide-react';
+import { LayoutDashboard, Users, Calendar, FileText, Settings, Award, PhoneIncoming, LogOut, X, Activity, FileCheck, BarChart3, Map, Trello, Receipt, ScrollText, Link as LinkIcon, FileEdit, Bell } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { UserRole } from '../types/auth';
 import { useLanguage } from '../lib/i18n';
@@ -88,6 +88,12 @@ const Sidebar: React.FC<SidebarProps> = ({ userRole, isOpen, onClose }) => {
       path: '/leads',
       roles: [UserRole.CALL_CENTER, UserRole.SUPER_ADMIN]
     },
+    { 
+      label: "Today's Follow-ups", 
+      icon: <Bell size={20} />, 
+      path: '/leads/follow-ups',
+      roles: [UserRole.CALL_CENTER, UserRole.SUPER_ADMIN]
+    },
     // Sales
     { 
       label: t('nav.salesDashboard'), 
@@ -118,6 +124,12 @@ const Sidebar: React.FC<SidebarProps> = ({ userRole, isOpen, onClose }) => {
       label: t('nav.salesProposals'), 
       icon: <FileText size={20} />, 
       path: '/sales/new',
+      roles: [UserRole.SALES_AGENT, UserRole.SUPER_ADMIN]
+    },
+    { 
+      label: t('nav.draftBookings'), 
+      icon: <FileEdit size={20} />, 
+      path: '/bookings/drafts',
       roles: [UserRole.SALES_AGENT, UserRole.SUPER_ADMIN]
     },
     // Coordination

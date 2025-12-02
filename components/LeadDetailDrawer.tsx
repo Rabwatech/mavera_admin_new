@@ -1,7 +1,13 @@
 
 import React, { useState } from 'react';
-import { X, Phone, Mail, Clock, Calendar, MessageSquare, Save, User, MapPin } from 'lucide-react';
+import { X, Phone, Mail, Clock, Calendar, MessageSquare, Save, User, MapPin, AlertCircle, Bell } from 'lucide-react';
 import { useLanguage } from '../lib/i18n';
+
+export enum LeadPriority {
+  HIGH = 'HIGH',
+  MEDIUM = 'MEDIUM',
+  LOW = 'LOW'
+}
 
 interface Lead {
   id: string;
@@ -11,6 +17,8 @@ interface Lead {
   status: string;
   date: string;
   notes?: string;
+  priority?: LeadPriority;
+  reminderDate?: string;
 }
 
 interface LeadDetailDrawerProps {
@@ -23,8 +31,19 @@ interface LeadDetailDrawerProps {
 const LeadDetailDrawer: React.FC<LeadDetailDrawerProps> = ({ isOpen, onClose, lead, onBookVisit }) => {
   const { t, direction } = useLanguage();
   const [note, setNote] = useState('');
+  const [priority, setPriority] = useState<LeadPriority>(lead?.priority || LeadPriority.MEDIUM);
+  const [reminderDate, setReminderDate] = useState(lead?.reminderDate || '');
 
   if (!lead) return null;
+
+  const getPriorityColor = (p: LeadPriority) => {
+    switch (p) {
+      case LeadPriority.HIGH: return 'bg-red-50 text-red-600 border-red-200';
+      case LeadPriority.MEDIUM: return 'bg-yellow-50 text-yellow-600 border-yellow-200';
+      case LeadPriority.LOW: return 'bg-gray-50 text-gray-600 border-gray-200';
+      default: return 'bg-gray-50 text-gray-600 border-gray-200';
+    }
+  };
 
   return (
     <>
@@ -83,6 +102,52 @@ const LeadDetailDrawer: React.FC<LeadDetailDrawerProps> = ({ isOpen, onClose, le
                   <Phone size={18} />
                   <span>Call Now</span>
                </button>
+            </div>
+
+            {/* Priority & Reminder */}
+            <div className="space-y-4">
+              <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Lead Priority & Follow-up</h3>
+              <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-4 shadow-sm">
+                <div>
+                  <label className="text-xs font-bold text-gray-500 mb-2 block">Priority Level</label>
+                  <div className="flex gap-2">
+                    {Object.values(LeadPriority).map((p) => (
+                      <button
+                        key={p}
+                        onClick={() => setPriority(p)}
+                        className={`flex-1 px-3 py-2 rounded-lg text-xs font-bold border-2 transition-all ${
+                          priority === p 
+                            ? getPriorityColor(p) + ' ring-2 ring-offset-1' 
+                            : 'bg-white text-gray-400 border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <span className="flex items-center justify-center gap-1">
+                          {p === LeadPriority.HIGH && <AlertCircle size={14} />}
+                          {p}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="text-xs font-bold text-gray-500 mb-2 block flex items-center gap-1">
+                    <Bell size={12} />
+                    Follow-up Reminder
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={reminderDate}
+                    onChange={(e) => setReminderDate(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-mavera-gold outline-none"
+                  />
+                  {reminderDate && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      You'll be notified on {new Date(reminderDate).toLocaleString()}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
 
             {/* Contact Info */}

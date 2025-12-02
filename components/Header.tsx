@@ -1,10 +1,12 @@
 "use client";
 
-import React from 'react';
-import { Search, Bell, Menu, Languages } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import React, { useState } from 'react';
+import { Search, Bell, Menu, Languages, LogOut } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
 import { UserRole, UserProfile } from '../types/auth';
 import { useLanguage } from '../lib/i18n';
+import { useAuth } from '../lib/auth';
+import NotificationCenter from './NotificationCenter';
 
 interface HeaderProps {
   user: UserProfile;
@@ -14,15 +16,31 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ user, onRoleSwitch, onToggleSidebar }) => {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
   const { t, toggleLanguage, language, direction } = useLanguage();
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [unreadCount] = useState(3);
+
+  const handleLogout = () => {
+    if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+      logout();
+      router.push('/login');
+    }
+  };
 
   const getBreadcrumb = () => {
+    if (pathname?.startsWith('/clients/') && pathname !== '/clients') {
+      return t('clients.detailSubtitle');
+    }
     switch (pathname) {
       case '/': return t('dash.salesTitle');
       case '/sales-dashboard': return t('nav.salesDashboard');
       case '/leads': return t('nav.incomingLeads');
       case '/sales/new': return t('nav.salesProposals');
+      case '/bookings/drafts': return t('nav.draftBookings');
       case '/arrangements': return t('nav.arrangements');
+      case '/clients': return t('nav.clients');
       case '/admin/finance': return 'Finance Dashboard';
       case '/admin/finance/invoices': return 'Invoices';
       default: return 'Control Panel';
@@ -53,6 +71,19 @@ const Header: React.FC<HeaderProps> = ({ user, onRoleSwitch, onToggleSidebar }) 
       </div>
 
       <div className="flex items-center gap-3 md:gap-6">
+        {/* Notification Bell */}
+        <button
+          onClick={() => setShowNotifications(!showNotifications)}
+          className="relative p-2 text-gray-500 hover:text-mavera-navy rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          <Bell size={20} />
+          {unreadCount > 0 && (
+            <span className="absolute top-1 right-1 w-4 h-4 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+              {unreadCount}
+            </span>
+          )}
+        </button>
+
         <button 
           onClick={toggleLanguage}
           className="flex items-center gap-1 text-gray-500 hover:text-mavera-navy p-1.5 rounded-lg hover:bg-gray-50 transition-colors"
@@ -60,21 +91,6 @@ const Header: React.FC<HeaderProps> = ({ user, onRoleSwitch, onToggleSidebar }) 
            <Languages size={20} />
            <span className="text-xs font-bold uppercase hidden sm:inline">{language === 'ar' ? 'English' : 'عربي'}</span>
         </button>
-
-        <div className="hidden xl:flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
-           <span className="text-[10px] uppercase font-bold text-gray-400">{t('header.viewAs')}</span>
-           <select 
-             value={user.role} 
-             onChange={(e) => onRoleSwitch(e.target.value as UserRole)}
-             className="bg-transparent text-xs font-bold text-mavera-navy outline-none cursor-pointer"
-           >
-             <option value={UserRole.SUPER_ADMIN}>Admin</option>
-             <option value={UserRole.SALES_AGENT}>Sales Agent</option>
-             <option value={UserRole.CALL_CENTER}>Call Center</option>
-             <option value={UserRole.FINANCE_MANAGER}>Finance Manager</option>
-             <option value={UserRole.COORDINATOR}>Coordinator</option>
-           </select>
-        </div>
 
         <div className={`flex items-center gap-3 pl-0 md:pl-6 ${direction === 'rtl' ? 'md:border-r' : 'md:border-l'} border-gray-100`}>
           <div className={`text-${direction === 'rtl' ? 'left' : 'right'} hidden md:block`}>
@@ -84,8 +100,18 @@ const Header: React.FC<HeaderProps> = ({ user, onRoleSwitch, onToggleSidebar }) 
           <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-mavera-gold text-white flex items-center justify-center font-bold shadow-lg shadow-mavera-gold/20 ring-2 ring-white text-sm md:text-base">
             {user.avatar}
           </div>
+          <button
+            onClick={handleLogout}
+            className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            title="تسجيل الخروج"
+          >
+            <LogOut size={20} />
+          </button>
         </div>
       </div>
+
+      {/* Notification Center */}
+      <NotificationCenter isOpen={showNotifications} onClose={() => setShowNotifications(false)} />
     </header>
   );
 };

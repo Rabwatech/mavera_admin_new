@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Search, FileCheck, DollarSign, FileText, MoreHorizontal } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Search, FileCheck, DollarSign, FileText, MoreHorizontal, Eye } from 'lucide-react';
 import { useLanguage } from '../../lib/i18n';
 
 interface ClientRow {
@@ -16,6 +17,7 @@ interface ClientRow {
 
 const ClientsPage: React.FC = () => {
   const { t, direction } = useLanguage();
+  const router = useRouter();
   const [clients] = useState<ClientRow[]>([
     { id: 'C101', name: 'Al-Rajhi Family', phone: '0501234567', eventDate: '2025-10-15', contract: 'Signed', payments: 'Partial', arrangements: 'Pending' },
     { id: 'C102', name: 'Fahad & Sara', phone: '0559876543', eventDate: '2025-11-02', contract: 'Signed', payments: 'Paid', arrangements: 'Uploaded' },
@@ -77,9 +79,18 @@ const ClientsPage: React.FC = () => {
                         <td className="px-6 py-4">{getStatusBadge('payments', client.payments)}</td>
                         <td className="px-6 py-4">{getStatusBadge('arrangements', client.arrangements)}</td>
                         <td className="px-6 py-4 text-end">
-                           <button className="p-2 text-gray-400 hover:text-mavera-navy hover:bg-gray-100 rounded-lg transition-colors">
-                              <MoreHorizontal size={18} />
-                           </button>
+                           <div className="flex items-center justify-end gap-2">
+                              <button 
+                                onClick={() => router.push(`/clients/${client.id}`)}
+                                className="p-2 text-gray-400 hover:text-mavera-gold hover:bg-gray-100 rounded-lg transition-colors"
+                                title={t('clients.viewDetails')}
+                              >
+                                 <Eye size={18} />
+                              </button>
+                              <button className="p-2 text-gray-400 hover:text-mavera-navy hover:bg-gray-100 rounded-lg transition-colors">
+                                 <MoreHorizontal size={18} />
+                              </button>
+                           </div>
                         </td>
                      </tr>
                   ))}

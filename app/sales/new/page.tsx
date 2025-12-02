@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, ChevronLeft, ChevronRight, Calendar, Users, Building2, FileSignature } from 'lucide-react';
+import { CheckCircle2, ChevronLeft, ChevronRight, Calendar, Users, Building2, FileSignature, FileText } from 'lucide-react';
 import { PaymentInstallment } from '../../../types';
 import { analyzeQuoteRisk } from '../../../services/geminiService';
 import PaymentPlanBuilder from '../../../components/PaymentPlanBuilder';
@@ -25,6 +25,8 @@ const SalesBooking: React.FC = () => {
   const [totalPackagePrice, setTotalPackagePrice] = useState<number>(50000);
   const [discountPercent, setDiscountPercent] = useState<number>(0);
   const [finalPrice, setFinalPrice] = useState<number>(50000);
+  const [discountCode, setDiscountCode] = useState<string>('');
+  const [appliedDiscountCode, setAppliedDiscountCode] = useState<string | null>(null);
 
   // Step 3: Payment
   const [installments, setInstallments] = useState<PaymentInstallment[]>([
@@ -49,6 +51,31 @@ const SalesBooking: React.FC = () => {
 
   const needsApproval = discountPercent > 5;
   const isPercentageValid = installments.reduce((sum, item) => sum + item.percentage, 0) === 100;
+
+  // Mock discount codes database
+  const discountCodes = [
+    { code: 'SUMMER2024', percentage: 15, isActive: true, maxUses: 50, currentUses: 23 },
+    { code: 'VIP20', percentage: 20, isActive: true, maxUses: 100, currentUses: 45 },
+    { code: 'WEDDING10', percentage: 10, isActive: false, maxUses: 30, currentUses: 30 },
+  ];
+
+  const handleApplyDiscountCode = () => {
+    const code = discountCodes.find(c => c.code === discountCode.toUpperCase() && c.isActive && c.currentUses < c.maxUses);
+    
+    if (code) {
+      setDiscountPercent(code.percentage);
+      setAppliedDiscountCode(code.code);
+      alert(`✅ Discount code "${code.code}" applied! ${code.percentage}% off`);
+    } else {
+      alert('❌ Invalid or expired discount code');
+    }
+  };
+
+  const handleRemoveDiscountCode = () => {
+    setDiscountCode('');
+    setAppliedDiscountCode(null);
+    setDiscountPercent(0);
+  };
 
   const handleAnalyzeRisk = async () => {
     if (finalPrice <= 0) return;
@@ -118,7 +145,7 @@ const SalesBooking: React.FC = () => {
               <div className="space-y-4">
                  <label className="block text-sm font-bold text-gray-500 mb-2">{t('wiz.hall')}</label>
                  <div className="grid grid-cols-1 gap-4">
-                    {['Mavera Hall A', 'Mavera Hall B', 'Grand Garden'].map((h) => (
+                    {['MAVERA 1', 'MAVERA 2', 'MAVERA 3'].map((h) => (
                        <div 
                           key={h}
                           onClick={() => setHall(h)}
@@ -157,34 +184,84 @@ const SalesBooking: React.FC = () => {
                        <span className={`absolute top-3.5 text-gray-400 text-sm font-medium ${direction === 'rtl' ? 'left-4' : 'right-4'}`}>SAR</span>
                     </div>
 
-                    <div className="flex justify-between items-center mb-2">
-                       <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide">{t('booking.discount')}</label>
-                       {needsApproval && (
-                         <span className="text-[10px] text-red-600 font-bold bg-red-50 px-2 py-1 rounded border border-red-100 animate-pulse">
-                           {t('booking.approvalReq')}
-                         </span>
-                       )}
-                    </div>
-                    <div className="flex items-center gap-4 mb-6">
-                        <div className="relative w-32">
-                           <input 
-                             type="number" 
-                             value={discountPercent}
-                             onChange={(e) => setDiscountPercent(Number(e.target.value))}
-                             className={`w-full bg-white border-2 rounded-xl px-4 py-2 font-mono text-lg font-bold outline-none text-center ${needsApproval ? 'border-red-200 text-red-600' : 'border-gray-100 text-mavera-navy'}`} 
-                             max="100"
-                           />
-                           <span className={`absolute top-3 text-gray-400 text-sm ${direction === 'rtl' ? 'left-3' : 'right-3'}`}>%</span>
+                   {/* Discount Code Section */}
+                   <div className="mb-6">
+                      <label className="block text-xs font-bold text-gray-500 mb-3 uppercase tracking-wide">Apply Discount Code</label>
+                      {!appliedDiscountCode ? (
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={discountCode}
+                            onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
+                            placeholder="Enter code (e.g., SUMMER2024)"
+                            className="flex-1 bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono uppercase outline-none focus:border-mavera-gold"
+                          />
+                          <button
+                            onClick={handleApplyDiscountCode}
+                            disabled={!discountCode}
+                            className="px-6 py-2.5 bg-mavera-gold text-white rounded-xl font-bold hover:bg-mavera-goldHover disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm"
+                          >
+                            Apply
+                          </button>
                         </div>
-                        <input 
-                           type="range" 
-                           min="0" 
-                           max="20" 
-                           value={discountPercent} 
-                           onChange={(e) => setDiscountPercent(Number(e.target.value))}
-                           className="flex-1 accent-mavera-gold h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer"
-                        />
-                    </div>
+                      ) : (
+                        <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <CheckCircle2 size={20} className="text-green-600" />
+                            <div>
+                              <p className="font-bold text-green-900 font-mono">{appliedDiscountCode}</p>
+                              <p className="text-xs text-green-700">Discount code applied</p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={handleRemoveDiscountCode}
+                            className="text-sm text-red-600 hover:text-red-700 font-medium"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      )}
+                   </div>
+
+                   <div className="flex justify-between items-center mb-2">
+                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide">{t('booking.discount')}</label>
+                      {needsApproval && (
+                        <span className="text-[10px] text-red-600 font-bold bg-red-50 px-2 py-1 rounded border border-red-100 animate-pulse">
+                          {t('booking.approvalReq')}
+                        </span>
+                      )}
+                      {appliedDiscountCode && (
+                        <span className="text-[10px] text-green-600 font-bold bg-green-50 px-2 py-1 rounded border border-green-100">
+                          FROM CODE: {appliedDiscountCode}
+                        </span>
+                      )}
+                   </div>
+                   <div className="flex items-center gap-4 mb-6">
+                       <div className="relative w-32">
+                          <input 
+                            type="number" 
+                            value={discountPercent}
+                            onChange={(e) => {
+                              setDiscountPercent(Number(e.target.value));
+                              if (appliedDiscountCode) setAppliedDiscountCode(null);
+                            }}
+                            className={`w-full bg-white border-2 rounded-xl px-4 py-2 font-mono text-lg font-bold outline-none text-center ${needsApproval ? 'border-red-200 text-red-600' : 'border-gray-100 text-mavera-navy'}`} 
+                            max="100"
+                          />
+                          <span className={`absolute top-3 text-gray-400 text-sm ${direction === 'rtl' ? 'left-3' : 'right-3'}`}>%</span>
+                       </div>
+                       <input 
+                          type="range" 
+                          min="0" 
+                          max="20" 
+                          value={discountPercent} 
+                          onChange={(e) => {
+                            setDiscountPercent(Number(e.target.value));
+                            if (appliedDiscountCode) setAppliedDiscountCode(null);
+                          }}
+                          className="flex-1 accent-mavera-gold h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer"
+                       />
+                   </div>
 
                     <div className="bg-mavera-navy p-4 rounded-xl text-white">
                       <div className="flex justify-between items-center">
@@ -249,7 +326,18 @@ const SalesBooking: React.FC = () => {
                  </div>
               </div>
 
-              <div className="flex justify-center">
+              <div className="flex justify-center gap-4">
+                 <button 
+                   onClick={() => {
+                     // Save as draft
+                     // في التطبيق الحقيقي، سيتم حفظ المسودة هنا
+                     router.push('/bookings/drafts');
+                   }}
+                   className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-8 py-4 rounded-2xl font-bold text-lg transition-all flex items-center gap-3"
+                 >
+                    <FileText size={20} />
+                    {t('bookings.saveAsDraft')}
+                 </button>
                  <button className="bg-mavera-gold hover:bg-mavera-goldHover text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-xl shadow-mavera-gold/30 flex items-center gap-3 transition-all transform hover:scale-105">
                     <CheckCircle2 size={24} />
                     {t('wiz.createAccount')}

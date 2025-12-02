@@ -11,12 +11,12 @@ const SalesTours: React.FC = () => {
 
   // MOCK DATA
   const [tours, setTours] = useState<Tour[]>([
-    { id: 'T1', clientName: 'Ahmed Al-Fahad', time: '16:00', hall: 'Mavera Hall A', guests: 350, type: 'Wedding', status: 'Scheduled', isToday: true },
-    { id: 'T2', clientName: 'Sarah Smith (Corp)', time: '17:30', hall: 'Mavera Hall B', guests: 120, type: 'Corporate', status: 'Scheduled', isToday: true },
-    { id: 'T3', clientName: 'Khalid & Noura', time: '10:00', hall: 'Mavera Hall A', guests: 500, type: 'Wedding', status: 'Completed', isToday: true },
-    { id: 'T4', clientName: 'Golden Events Co', time: '14:00', hall: 'Mavera Hall B', guests: 50, type: 'Exhibition', status: 'NoShow', isToday: true },
-    { id: 'T5', clientName: 'Dr. Faisal', time: '11:00', hall: 'Mavera Hall A', guests: 200, type: 'Conference', status: 'Scheduled', isToday: false },
-    { id: 'T6', clientName: 'Al-Otaibi Wedding', time: '19:00', hall: 'Mavera Hall A', guests: 600, type: 'Wedding', status: 'Scheduled', isToday: false },
+    { id: 'T1', clientName: 'Ahmed Al-Fahad', time: '16:00', hall: 'MAVERA 1', guests: 350, type: 'Wedding', status: 'Scheduled', isToday: true },
+    { id: 'T2', clientName: 'Sarah Smith (Corp)', time: '17:30', hall: 'MAVERA 2', guests: 120, type: 'Corporate', status: 'Scheduled', isToday: true },
+    { id: 'T3', clientName: 'Khalid & Noura', time: '10:00', hall: 'MAVERA 1', guests: 500, type: 'Wedding', status: 'Completed', isToday: true },
+    { id: 'T4', clientName: 'Golden Events Co', time: '14:00', hall: 'MAVERA 2', guests: 50, type: 'Exhibition', status: 'NoShow', isToday: true },
+    { id: 'T5', clientName: 'Dr. Faisal', time: '11:00', hall: 'MAVERA 1', guests: 200, type: 'Conference', status: 'Scheduled', isToday: false },
+    { id: 'T6', clientName: 'Al-Otaibi Wedding', time: '19:00', hall: 'MAVERA 3', guests: 600, type: 'Wedding', status: 'Scheduled', isToday: false },
   ]);
 
   const handleStatusChange = (id: string, status: Tour['status']) => {
