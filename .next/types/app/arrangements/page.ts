@@ -1,4 +1,4 @@
-// File: /Users/nasher/Documents/Work/RABWA/صالة/mavera_admin_new/app/arrangements/page.tsx
+// File: /Users/amgedalmogahed/Documents/Rabwatech/Clients/Mavera/Web Project/mavera_admin_new/app/arrangements/page.tsx
 import * as entry from '../../../../app/arrangements/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

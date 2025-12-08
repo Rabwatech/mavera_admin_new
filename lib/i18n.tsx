@@ -37,11 +37,11 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.invoices': 'الفواتير والمدفوعات',
     'nav.financeContracts': 'أرشيف العقود',
     'nav.integrations': 'الربط والأنظمة',
-    
+
     // Header
     'header.searchPlaceholder': 'ابحث عن حجوزات، عملاء...',
     'header.viewAs': 'عرض بصلاحية:',
-    
+
     // Dashboard
     'dash.salesTitle': 'المبيعات',
     'dash.salesSubtitle': 'نظرة عامة وروابط سريعة للوحدات',
@@ -54,7 +54,7 @@ const translations: Record<Language, Record<string, string>> = {
     'dash.newCustomers': 'عملائي الجدد',
     'dash.total': 'إجمالي',
     'dash.thisMonth': 'هذا الشهر',
-    
+
     // Finance
     'fin.cashIn': 'التحصيل اليومي',
     'fin.pendingInv': 'فواتير معلقة',
@@ -68,7 +68,7 @@ const translations: Record<Language, Record<string, string>> = {
     'fin.sync': 'مزامنة ERP',
     'fin.download': 'تحميل PDF',
     'fin.paidVia': 'مدفوع عبر',
-    
+
     // Tours
     'tours.title': 'إدارة الجولات',
     'tours.subtitle': 'جدول الزيارات الميدانية وعرض القاعات',
@@ -157,7 +157,7 @@ const translations: Record<Language, Record<string, string>> = {
     'clients.contractValue': 'قيمة العقد',
     'clients.signedDate': 'تاريخ التوقيع',
     'clients.viewAllPayments': 'عرض جميع الدفعات',
-    
+
     // Payments
     'payments.title': 'دفعات العميل',
     'payments.subtitle': 'جميع الدفعات والمدفوعات',
@@ -191,14 +191,14 @@ const translations: Record<Language, Record<string, string>> = {
     'payments.receiptAvailable': 'إيصال متاح',
     'payments.downloadingReceipt': 'جاري تحميل الإيصال',
     'payments.linkCopied': 'تم نسخ الرابط',
-    
+
     // Leads
     'leads.title': 'العملاء الجدد',
     'leads.subtitle': 'إدارة الاستفسارات وجدولة المواعيد',
     'leads.filter': 'تصفية',
     'leads.search': 'بحث سريع...',
     'leads.bookAppt': 'حجز موعد',
-    
+
     // Sales Booking
     'booking.title': 'حجز جديد',
     'booking.subtitle': 'معالج الحجز الرقمي',
@@ -218,13 +218,13 @@ const translations: Record<Language, Record<string, string>> = {
     'booking.addInstallment': 'إضافة دفعة',
     'booking.generateContract': 'إنشاء العقد',
     'booking.submitApproval': 'إرسال للموافقة',
-    
+
     // Arrangements
     'arr.title': 'الترتيبات والتنفيذ',
     'arr.subtitle': 'رفع المستندات النهائية لبدء التنفيذ',
     'arr.uploadSuccess': 'تم الرفع بنجاح',
     'arr.clickUpload': 'اضغط لرفع PDF',
-    
+
     // Bookings & Drafts
     'bookings.draftsTitle': 'مسودات الحجز',
     'bookings.draftsSubtitle': 'إدارة المسودات المبدئية وانتظار موافقة العملاء',
@@ -243,7 +243,7 @@ const translations: Record<Language, Record<string, string>> = {
     'bookings.clientStatus': 'حالة العميل',
     'bookings.actions': 'الإجراءات',
     'bookings.sendToNafath': 'إرسال للموافقة عبر نفاذ',
-    'bookings.pendingApproval': 'في انتظار الموافقة',
+
     'bookings.draft': 'مسودة',
     'bookings.clientApproved': 'موافق عليها من العميل',
     'bookings.pendingClientApproval': 'في انتظار موافقة العميل',
@@ -298,11 +298,11 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.invoices': 'Invoices & Payments',
     'nav.financeContracts': 'Contracts Audit',
     'nav.integrations': 'Integrations',
-    
+
     // Header
     'header.searchPlaceholder': 'Search bookings, clients...',
     'header.viewAs': 'View As:',
-    
+
     // Dashboard
     'dash.salesTitle': 'Sales',
     'dash.salesSubtitle': 'Overview and quick links',
@@ -315,7 +315,7 @@ const translations: Record<Language, Record<string, string>> = {
     'dash.newCustomers': 'My New Customers',
     'dash.total': 'Total',
     'dash.thisMonth': 'This Month',
-    
+
     // Finance
     'fin.cashIn': 'Cash In (Today)',
     'fin.pendingInv': 'Pending Invoices',
@@ -418,7 +418,7 @@ const translations: Record<Language, Record<string, string>> = {
     'clients.contractValue': 'Contract Value',
     'clients.signedDate': 'Signed Date',
     'clients.viewAllPayments': 'View All Payments',
-    
+
     // Payments
     'payments.title': 'Client Payments',
     'payments.subtitle': 'All payments and transactions',
@@ -452,14 +452,14 @@ const translations: Record<Language, Record<string, string>> = {
     'payments.receiptAvailable': 'Receipt Available',
     'payments.downloadingReceipt': 'Downloading receipt',
     'payments.linkCopied': 'Link copied',
-    
+
     // Leads
     'leads.title': 'Incoming Leads',
     'leads.subtitle': 'Manage inquiries and schedule appointments',
     'leads.filter': 'Filter',
     'leads.search': 'Quick search...',
     'leads.bookAppt': 'Book Appointment',
-    
+
     // Sales Booking
     'booking.title': 'New Booking Wizard',
     'booking.subtitle': 'Digital Booking Journey',
@@ -485,7 +485,7 @@ const translations: Record<Language, Record<string, string>> = {
     'arr.subtitle': 'Upload finalized documents to trigger execution',
     'arr.uploadSuccess': 'Upload Successful',
     'arr.clickUpload': 'Click to Upload PDF',
-    
+
     // Bookings & Drafts
     'bookings.draftsTitle': 'Draft Bookings',
     'bookings.draftsSubtitle': 'Manage preliminary drafts and await client approval',
@@ -504,7 +504,7 @@ const translations: Record<Language, Record<string, string>> = {
     'bookings.clientStatus': 'Client Status',
     'bookings.actions': 'Actions',
     'bookings.sendToNafath': 'Send to Nafath for Approval',
-    'bookings.pendingApproval': 'Pending Approval',
+
     'bookings.draft': 'Draft',
     'bookings.clientApproved': 'Client Approved',
     'bookings.pendingClientApproval': 'Pending Client Approval',

@@ -22,6 +22,7 @@ export type Permission =
 export interface UserProfile {
   id: string;
   name: string;
+  email: string;
   role: UserRole; // Primary role for display
   roles?: UserRole[]; // Support for multiple roles
   customPermissions?: Permission[]; // Granular overrides
@@ -32,6 +33,7 @@ export const MOCK_USERS: Record<string, UserProfile> = {
   SALES: {
     id: 'u1',
     name: 'Omar Hassan',
+    email: 'omar.hassan@mavera.sa',
     role: UserRole.SALES_AGENT,
     roles: [UserRole.SALES_AGENT],
     avatar: 'OH'
@@ -39,6 +41,7 @@ export const MOCK_USERS: Record<string, UserProfile> = {
   CALL_CENTER: {
     id: 'u2',
     name: 'Sara Ali',
+    email: 'sara.ali@mavera.sa',
     role: UserRole.CALL_CENTER,
     roles: [UserRole.CALL_CENTER],
     avatar: 'SA'
@@ -46,6 +49,7 @@ export const MOCK_USERS: Record<string, UserProfile> = {
   ADMIN: {
     id: 'u3',
     name: 'Admin User',
+    email: 'admin@mavera.sa',
     role: UserRole.SUPER_ADMIN,
     roles: [UserRole.SUPER_ADMIN],
     avatar: 'AD'
@@ -53,6 +57,7 @@ export const MOCK_USERS: Record<string, UserProfile> = {
   FINANCE: {
     id: 'u4',
     name: 'Khaled Finance',
+    email: 'khaled.finance@mavera.sa',
     role: UserRole.FINANCE_MANAGER,
     roles: [UserRole.FINANCE_MANAGER],
     // Example: Can manage invoices but specifically CANNOT sync to ERP if we wanted to restrict
@@ -61,6 +66,7 @@ export const MOCK_USERS: Record<string, UserProfile> = {
   COORDINATOR: {
     id: 'u5',
     name: 'Sarah Coordinator',
+    email: 'sarah.coordinator@mavera.sa',
     role: UserRole.COORDINATOR,
     roles: [UserRole.COORDINATOR],
     avatar: 'SC'

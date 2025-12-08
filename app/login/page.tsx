@@ -86,9 +86,10 @@ const LoginPage: React.FC = () => {
         id: user.email,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        avatar: user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
       });
-      
+
       // Redirect based on role
       switch (user.role) {
         case UserRole.SUPER_ADMIN:
@@ -144,7 +145,7 @@ const LoginPage: React.FC = () => {
 
       <div className="w-full max-w-6xl relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
+
           {/* Left Side - Branding */}
           <div className="hidden lg:flex flex-col justify-center text-white">
             <div className="mb-8">
@@ -273,11 +274,10 @@ const LoginPage: React.FC = () => {
                   key={user.role}
                   type="button"
                   onClick={() => handleQuickLogin(user)}
-                  className={`w-full p-4 border-2 rounded-xl transition-all flex items-center gap-3 ${
-                    selectedRole === user.role
+                  className={`w-full p-4 border-2 rounded-xl transition-all flex items-center gap-3 ${selectedRole === user.role
                       ? 'border-mavera-gold bg-mavera-gold/5'
                       : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   <div className={`w-10 h-10 ${user.color} rounded-lg flex items-center justify-center text-white shrink-0`}>
                     {user.icon}
